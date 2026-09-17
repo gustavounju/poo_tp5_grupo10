@@ -1,8 +1,9 @@
-package ar.edu.unju.fi.poo.manager;
+package ar.edu.unju.fi.poo.punto01.manager;
 
 import java.util.ArrayList;
 import java.util.List;
-import ar.edu.unju.fi.poo.model.Producto;
+
+import ar.edu.unju.fi.poo.punto01.model.Producto;
 
 public class ManagerProducto {
     private List<Producto> productos;

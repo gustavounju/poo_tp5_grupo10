@@ -1,4 +1,4 @@
-package ar.edu.unju.fi.poo.model;
+package ar.edu.unju.fi.poo.punto01.model;
 
 import java.util.ArrayList;
 import java.util.List;

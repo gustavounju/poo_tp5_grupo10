@@ -1,9 +1,9 @@
-package ar.edu.unju.fi.poo;
+package ar.edu.unju.fi.poo.punto01;
 
-import ar.edu.unju.fi.poo.manager.ManagerProducto;
-import ar.edu.unju.fi.poo.model.CarritoDeCompras;
-import ar.edu.unju.fi.poo.model.Producto;
-import ar.edu.unju.fi.poo.model.Usuario;
+import ar.edu.unju.fi.poo.punto01.manager.ManagerProducto;
+import ar.edu.unju.fi.poo.punto01.model.CarritoDeCompras;
+import ar.edu.unju.fi.poo.punto01.model.Producto;
+import ar.edu.unju.fi.poo.punto01.model.Usuario;
 
 public class MainEcommerce {
     public static void main(String[] args) {
