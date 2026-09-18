@@ -29,7 +29,7 @@ public class ManagerLogistica {
         // Precarga de Paquetes en ALMACEN
         paquetesAlmacen.add(new Paquete("PKG001", "Maria Gomez", "Av. Siria 450, San Pedro", 15.0, 0.08));
         paquetesAlmacen.add(new Paquete("PKG002", "Juan Carlos Perez", "Calle Alberdi 120, La Mendieta", 45.0, 0.25));
-        paquetesAlmacen.add(new Paquete("PKG003", "Distribuidora del Norte", "Ruta 34 Km 1198", 520.0, 2.20));
+        paquetesAlmacen.add(new Paquete("PKG003", "Distribuidora del Norte", "Ruta 34 Km 1198", 520.0, 5));
         paquetesAlmacen.add(new Paquete("PKG004", "Lucia Fernandez", "Barrio Providencia Mza 4", 8.5, 0.04));
         paquetesAlmacen.add(new Paquete("PKG005", "Taller San Jose", "Av. 9 de Julio 890", 250.0, 1.10));
     }
@@ -78,10 +78,15 @@ public class ManagerLogistica {
 
     public List<Envio> filtrarEnviosPorEstado(EstadoEnvio estado) {
         List<Envio> filtrados = new ArrayList<>();
+        boolean encontro = false;
         for (Envio e : enviosRegistrados) {
             if (e.getEstado() == estado) {
                 filtrados.add(e);
+                encontro = true;
             }
+        }
+        if (!encontro) {
+            System.out.println("No se encontraron envios con estado " + estado);
         }
         return filtrados;
     }

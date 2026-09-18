@@ -61,17 +61,15 @@ public class RutaDiaria {
 
         // Validar sobrepeso
         if (nuevoPeso > vehiculo.getCapacidadKgMax()) {
-            System.out.printf("RECHAZADO: El envio #%d supera la capacidad en peso (%.1f kg / max %.1f kg)\n",
-                    envio.getId(), nuevoPeso, vehiculo.getCapacidadKgMax());
-            envio.setEstado(EstadoEnvio.EN_ALMACEN); // Permanece o vuelve al almacen
+        	System.out.println("RECHAZADO: El envio #" + envio.getId() + " (" + pkg.getPesoKg() + " kg) excede la carga. El vehiculo lleva " + getPesoTotalCargado() + " kg y su maximo permitido es " + vehiculo.getCapacidadKgMax() + " kg (Total intentado enviar este paquete seria: " + nuevoPeso + " kg).");            
+        	envio.setEstado(EstadoEnvio.EN_ALMACEN); // vuelve al almacen
             return false;
         }
 
         // Validar sobrevolumen
         if (nuevoVolumen > vehiculo.getVolumenM3Max()) {
-            System.out.printf("RECHAZADO: El envio #%d supera la capacidad en volumen (%.2f m3 / max %.2f m3)\n",
-                    envio.getId(), nuevoVolumen, vehiculo.getVolumenM3Max());
-            envio.setEstado(EstadoEnvio.EN_ALMACEN); // Permanece o vuelve al almacen
+        	System.out.println("RECHAZADO: El envio #" + envio.getId() + " (" + pkg.getVolumenM3() + " m3) excede el volumen. El vehiculo lleva " + getVolumenTotalCargado() + " m3 y su maximo permitido es " + vehiculo.getVolumenM3Max() + " m3 (Total intentado: " + nuevoVolumen + " m3).");
+            envio.setEstado(EstadoEnvio.EN_ALMACEN); // vuelve al almacen
             return false;
         }
 
@@ -84,7 +82,6 @@ public class RutaDiaria {
     }
 
     public void mostrarResumenRuta() {
-        System.out.println("==================================================");
         System.out.println("Ruta Diaria N°: " + idRuta + " - Fecha: " + fecha);
         System.out.println(vehiculo);
         System.out.println("Cantidad de Envios: " + envios.size());
@@ -95,10 +92,9 @@ public class RutaDiaria {
         System.out.println("Carga Peso actual de todos los paquetes: " + pesoActual + " kg - Maximo del vehiculo: " + vehiculo.getCapacidadKgMax() + " kg");
  
         System.out.println("Carga en Volumen de todos los paquetes: " + volActual + " m3 - Maximo del vehiculo: " + vehiculo.getVolumenM3Max() + " m3");
-        System.out.println("--- Envios a bordo ---");
+        System.out.println("--- Envios a bordo del vehiculo---");
         for (Envio e : envios) {
             System.out.println(e);
         }
-        System.out.println("==================================================");
     }
 }
