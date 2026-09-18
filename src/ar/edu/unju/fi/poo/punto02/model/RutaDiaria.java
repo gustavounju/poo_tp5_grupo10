@@ -77,20 +77,23 @@ public class RutaDiaria {
 
     public void mostrarResumenRuta() {
         System.out.println("==================================================");
-        System.out.println("Ruta Diaria N°: " + idRuta + " | Fecha: " + fecha);
+        System.out.println("Ruta Diaria N°: " + idRuta + " - Fecha: " + fecha);
         System.out.println(vehiculo);
         System.out.println("Cantidad de Envios: " + envios.size());
         
         double pesoActual = getPesoTotalCargado();
         double volActual = getVolumenTotalCargado();
-        double ocupacionPeso = (pesoActual / vehiculo.getCapacidadKgMax()) * 100.0;
-        double ocupacionVol = (volActual / vehiculo.getVolumenM3Max()) * 100.0;
+        //double ocupacionPeso = (pesoActual / vehiculo.getCapacidadKgMax()) * 100.0;
+        //double ocupacionVol = (volActual / vehiculo.getVolumenM3Max()) * 100.0;
 
-        System.out.printf("Carga Peso: %.2f kg / %.2f kg (%.1f%%)\n", pesoActual, vehiculo.getCapacidadKgMax(), ocupacionPeso);
-        System.out.printf("Carga Volumen: %.2f m3 / %.2f m3 (%.1f%%)\n", volActual, vehiculo.getVolumenM3Max(), ocupacionVol);
+        // System.out.printf("Carga Peso: %.2f kg / %.2f kg (%.1f%%)\n", pesoActual, vehiculo.getCapacidadKgMax(), ocupacionPeso);
+        System.out.println("Carga Peso actual de todos los paquetes: " + pesoActual + " kg - Maximo del vehiculo: " + vehiculo.getCapacidadKgMax() + " kg");
+        //System.out.printf("Carga Volumen: %.2f m3 / %.2f m3 (%.1f%%)\n", volActual, vehiculo.getVolumenM3Max(), ocupacionVol);
+        //System.out.printf("Carga en Volumen de todos los paquetes: %.2f m3", volActual, "maximo del vehiculo", vehiculo.getVolumenM3Max());
+        System.out.println("Carga en Volumen de todos los paquetes: " + volActual + " m3 - Maximo del vehiculo: " + vehiculo.getVolumenM3Max() + " m3");
         System.out.println("--- Envios a bordo ---");
         for (Envio e : envios) {
-            System.out.println(" * " + e);
+            System.out.println(e);
         }
         System.out.println("==================================================");
     }
