@@ -22,7 +22,7 @@ public class MainLogistica {
 
         
         // Generar envios a partir de paquetes en deposito
-        System.out.println("generacion de envios (Estado inicial: PENDIENTE):");
+        System.out.println("generacion de envios (Estado inicial: GENERADOS pasan a EN_ALMACEN):");
         Envio envio1 = manager.crearEnvio(manager.buscarPaquetePorCodigo("PKG001"));
         Envio envio2 = manager.crearEnvio(manager.buscarPaquetePorCodigo("PKG002"));
         Envio envio3 = manager.crearEnvio(manager.buscarPaquetePorCodigo("PKG003"));
@@ -30,11 +30,11 @@ public class MainLogistica {
         Envio envio5 = manager.crearEnvio(manager.buscarPaquetePorCodigo("PKG005"));
 
         for (Envio e : manager.getEnviosRegistrados()) {
-            System.out.println(e);
+            System.out.println(e); // Llama a Envio.toString() y este a su vez a Paquete.toString()
         }
 
         // Crear Ruta Diaria con una unidad utilitaria menor (Kangoo: 650 kg max, 3.0 m3 max)
-        Vehiculo utilitario = manager.buscarVehiculoPorPatente("AF456CD");
+        Vehiculo utilitario = manager.buscarVehiculoPorPatente("AE123AB");
         RutaDiaria ruta1 = new RutaDiaria(101, LocalDate.now(), utilitario);
         
         System.out.println("[Prueba] Asignacion de envio sin paquete:");
@@ -70,14 +70,14 @@ public class MainLogistica {
 
         // Verificar estado de envios tras la carga
         System.out.println("envios en transito");
-        for (Envio e : manager.filtrarEnviosPorEstado(EstadoEnvio.EN_TRANSITO)) {
+        for (Envio e : manager.filtrarEnviosPorEstado(EstadoEnvio.EN_RUTA)) {
             System.out.println(e);
         }
 
-        System.out.println("--- Envios pendientes en deposito ---");
+        System.out.println("--- Envios pendientes en deposito (ALMACEN) ---");
         boolean hayPendientes = false;
 
-        for (Envio e : manager.filtrarEnviosPorEstado(EstadoEnvio.PENDIENTE)) {
+        for (Envio e : manager.filtrarEnviosPorEstado(EstadoEnvio.EN_ALMACEN)) {
             System.out.println(e);
             hayPendientes = true;
         }

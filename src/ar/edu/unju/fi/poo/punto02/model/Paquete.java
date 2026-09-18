@@ -58,6 +58,6 @@ public class Paquete {
     @Override
     public String toString() {
         return "Paquete [" + codigo + "] Destinatario: " + destinatario + 
-               " | Dir: " + direccion + " | Peso: " + pesoKg + " kg | Vol: " + volumenM3 + " m3";
+               " - Dir: " + direccion + " - Peso: " + pesoKg + " kg - Vol: " + volumenM3 + " m3";
     }
 }

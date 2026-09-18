@@ -11,7 +11,7 @@ public class Envio {
     public Envio(int id, Paquete paquete) {
         this.id = id;
         this.paquete = paquete;
-        this.estado = EstadoEnvio.PENDIENTE;
+        this.estado = EstadoEnvio.GENERADO;
         this.fechaCreacion = LocalDate.now();
     }
 
@@ -47,6 +47,20 @@ public class Envio {
         this.fechaCreacion = fechaCreacion;
     }
 
+    // Cumple la operacion requerida: despachar()
+    // Transiciona el envio a EN_RUTA cuando sale del almacen
+    public void despachar() {
+        this.estado = EstadoEnvio.EN_RUTA;
+    }
+
+    // Cumple la operacion requerida: devolver()
+    // Marca el envio como DEVUELTO si no pudo entregarse
+    public void devolver() {
+        this.estado = EstadoEnvio.DEVUELTO;
+    }
+    
+    
+    
     @Override
     public String toString() {
         return "Envio #" + id + " [" + estado + "] - " + paquete;

@@ -1,8 +1,10 @@
 package ar.edu.unju.fi.poo.punto02.model;
 
 public enum EstadoEnvio {
-    PENDIENTE,
-    EN_TRANSITO,
+    GENERADO,
+    EN_ALMACEN,
+    EN_RUTA,
     ENTREGADO,
+    DEVUELTO,
     CANCELADO
 }

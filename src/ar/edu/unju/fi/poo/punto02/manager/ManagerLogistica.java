@@ -26,7 +26,7 @@ public class ManagerLogistica {
         flota.add(new Vehiculo("AE123AB", "Renault Kangoo Furgon", 650.0, 3.0));
         flota.add(new Vehiculo("AF456CD", "Mercedes-Benz Sprinter", 1800.0, 10.5));
 
-        // Precarga de Paquetes en deposito
+        // Precarga de Paquetes en ALMACEN
         paquetesAlmacen.add(new Paquete("PKG001", "Maria Gomez", "Av. Siria 450, San Pedro", 15.0, 0.08));
         paquetesAlmacen.add(new Paquete("PKG002", "Juan Carlos Perez", "Calle Alberdi 120, La Mendieta", 45.0, 0.25));
         paquetesAlmacen.add(new Paquete("PKG003", "Distribuidora del Norte", "Ruta 34 Km 1198", 520.0, 2.20));
@@ -66,9 +66,12 @@ public class ManagerLogistica {
         return null;
     }
 
+    // Cumple la funcion requerida de: agregarPaquete()
+    // Recibe un paquete del deposito.
     public Envio crearEnvio(Paquete paquete) {
         if (paquete == null) return null;
         Envio nuevo = new Envio(contadorEnvios++, paquete);
+        nuevo.setEstado(EstadoEnvio.EN_ALMACEN); // Ingresa al almacen listo para despacho
         enviosRegistrados.add(nuevo);
         return nuevo;
     }

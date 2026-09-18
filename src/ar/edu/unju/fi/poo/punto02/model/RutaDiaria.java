@@ -51,27 +51,35 @@ public class RutaDiaria {
 
     public boolean agregarEnvio(Envio envio) {
         if (envio == null || envio.getPaquete() == null) {
+            System.out.println("RECHAZADO: Envio invalido o sin paquete.");
             return false;
         }
 
-        double nuevoPeso = getPesoTotalCargado() + envio.getPaquete().getPesoKg();
-        double nuevoVolumen = getVolumenTotalCargado() + envio.getPaquete().getVolumenM3();
+        Paquete pkg = envio.getPaquete();
+        double nuevoPeso = getPesoTotalCargado() + pkg.getPesoKg();
+        double nuevoVolumen = getVolumenTotalCargado() + pkg.getVolumenM3();
 
+        // Validar sobrepeso
         if (nuevoPeso > vehiculo.getCapacidadKgMax()) {
-            System.out.println("RECHAZADO: El envio #" + envio.getId() + 
-                               " supera la capacidad en peso (" + nuevoPeso + " kg / max " + vehiculo.getCapacidadKgMax() + " kg)");
+            System.out.printf("RECHAZADO: El envio #%d supera la capacidad en peso (%.1f kg / max %.1f kg)\n",
+                    envio.getId(), nuevoPeso, vehiculo.getCapacidadKgMax());
+            envio.setEstado(EstadoEnvio.EN_ALMACEN); // Permanece o vuelve al almacen
             return false;
         }
 
+        // Validar sobrevolumen
         if (nuevoVolumen > vehiculo.getVolumenM3Max()) {
-            System.out.println("RECHAZADO: El envio #" + envio.getId() + 
-                               " supera la capacidad en volumen (" + nuevoVolumen + " m3 / max " + vehiculo.getVolumenM3Max() + " m3)");
+            System.out.printf("RECHAZADO: El envio #%d supera la capacidad en volumen (%.2f m3 / max %.2f m3)\n",
+                    envio.getId(), nuevoVolumen, vehiculo.getVolumenM3Max());
+            envio.setEstado(EstadoEnvio.EN_ALMACEN); // Permanece o vuelve al almacen
             return false;
         }
 
+        // Si supero las dos pruebas de cubicaje, sube al vehiculo
         envios.add(envio);
-        envio.setEstado(EstadoEnvio.EN_TRANSITO);
-        System.out.println("ASIGNADO: Envio #" + envio.getId() + " agregado a la ruta del vehiculo " + vehiculo.getPatente());
+        envio.despachar(); // Pasa a EN_RUTA
+        System.out.printf("ASIGNADO: Envio #%d agregado a la ruta del vehiculo %s\n", 
+                envio.getId(), vehiculo.getPatente());
         return true;
     }
 
@@ -83,13 +91,9 @@ public class RutaDiaria {
         
         double pesoActual = getPesoTotalCargado();
         double volActual = getVolumenTotalCargado();
-        //double ocupacionPeso = (pesoActual / vehiculo.getCapacidadKgMax()) * 100.0;
-        //double ocupacionVol = (volActual / vehiculo.getVolumenM3Max()) * 100.0;
-
-        // System.out.printf("Carga Peso: %.2f kg / %.2f kg (%.1f%%)\n", pesoActual, vehiculo.getCapacidadKgMax(), ocupacionPeso);
+ 
         System.out.println("Carga Peso actual de todos los paquetes: " + pesoActual + " kg - Maximo del vehiculo: " + vehiculo.getCapacidadKgMax() + " kg");
-        //System.out.printf("Carga Volumen: %.2f m3 / %.2f m3 (%.1f%%)\n", volActual, vehiculo.getVolumenM3Max(), ocupacionVol);
-        //System.out.printf("Carga en Volumen de todos los paquetes: %.2f m3", volActual, "maximo del vehiculo", vehiculo.getVolumenM3Max());
+ 
         System.out.println("Carga en Volumen de todos los paquetes: " + volActual + " m3 - Maximo del vehiculo: " + vehiculo.getVolumenM3Max() + " m3");
         System.out.println("--- Envios a bordo ---");
         for (Envio e : envios) {
