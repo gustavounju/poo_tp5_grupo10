@@ -1,44 +1,46 @@
-# Historias de Usuario — Punto 2 (Logística y Envíos)
+# Historias de Usuario — Punto 2 (Gestión Logística y Envíos)
 
-## HU01: Registro y cubicaje de paquetes
-* **Descripción:** Como despachante de depósito, quiero registrar paquetes indicando código, destinatario, dirección, peso en kilogramos y volumen en metros cúbicos para que el sistema evalúe su admisibilidad en los transportes.
+## HU01: Registro de paquetes
+* **Descripción:** Como despachante de depósito, quiero registrar paquetes indicando código, descripción, peso en kg y volumen en decímetros cúbicos (dm³), para tener identificada la carga a trasladar.
 * **Criterios de Aceptación:**
-  * El peso (kg) y el volumen (m³) deben ser valores estrictamente mayores a cero.
-  * Cada paquete debe identificarse con un código alfanumérico único.
-  * Debe permitir consultar las dimensiones y peso para cálculos de cubicaje.
+  * El paquete debe registrar código, descripción, peso (kg) y volumen (dm³).
+  * Los valores de peso y volumen deben ser numéricos y mayores a cero.
+  * Debe permitir consultar el peso y volumen para los cálculos de carga.
 
 ---
 
-## HU02: Gestión de flota y capacidad de vehículos
-* **Descripción:** Como coordinador de logística, quiero registrar los vehículos de reparto especificando patente, modelo, capacidad máxima de peso (kg) y volumen límite (m³) para evitar la sobrecarga de las unidades.
+## HU02: Registro de vehículos de reparto
+* **Descripción:** Como coordinador de logística, quiero registrar vehículos indicando patente, modelo, capacidad máxima de peso en kg y volumen en dm³, para conocer el límite de carga admisible por unidad.
 * **Criterios de Aceptación:**
-  * No se permite registrar capacidades o volúmenes menores o iguales a cero.
-  * La patente debe servir como clave única de identificación dentro de la flota.
+  * Debe registrar patente, modelo, capacidad máxima de peso (kg) y capacidad de volumen (dm³).
+  * La patente identifica unívocamente al vehículo en la flota.
 
 ---
 
-## HU03: Creación y seguimiento de envíos
-* **Descripción:** Como despachante, quiero vincular un paquete a un envío y controlar su estado operativo (PENDIENTE, EN_TRANSITO, ENTREGADO, CANCELADO) para mantener la trazabilidad de la entrega.
+## HU03: Creación y preparación de envíos
+* **Descripción:** Como despachante, quiero crear un envío con sus datos de entrega y asociarle uno o más paquetes, para consolidar la mercadería de un destinatario.
 * **Criterios de Aceptación:**
-  * Todo envío recién creado debe inicializarse por defecto en estado `PENDIENTE`.
-  * Debe permitir transicionar el estado conforme avanza la distribución física.
-  * Cada envío debe asociarse a un identificador secuencial o código único.
+  * El envío debe registrar id, remitente, destinatario, dirección de entrega y lista de paquetes asociados.
+  * Todo envío nuevo debe inicializarse por defecto en estado `GENERADO`.
+  * Un envío puede contener uno o más paquetes agregados mediante la operación `agregarPaquete()`.
+  * Debe permitir consultar la información completa del envío y sus paquetes con `mostrarInfo()`.
 
 ---
 
 ## HU04: Asignación de envíos a la ruta diaria
-* **Descripción:** Como planificador de distribución, quiero asignar envíos a una ruta diaria encabezada por un vehículo específico, verificando que no se exceda la capacidad disponible de la unidad.
+* **Descripción:** Como planificador de logística, quiero armar una ruta diaria asignando envíos a un vehículo, para despachar únicamente las cargas que no superen la capacidad de la unidad.
 * **Criterios de Aceptación:**
-  * Al intentar agregar un envío, el sistema debe comprobar que la suma del peso actual más el peso del nuevo paquete no supere el peso máximo del vehículo.
-  * Se debe realizar la misma validación restrictiva para el volumen total acumulado en m³.
-  * Si la carga supera cualquiera de los dos límites, el envío debe ser rechazado y el sistema debe emitir un mensaje de advertencia.
-  * Si la asignación es exitosa, el estado del envío debe cambiar a `EN_TRANSITO`.
+  * Un envío no puede ser asignado a una ruta si no tiene al menos un paquete cargado.
+  * La suma del peso acumulado de la ruta más el peso total del nuevo envío no debe superar la capacidad de peso del vehículo.
+  * La suma del volumen acumulado de la ruta más el volumen del nuevo envío no debe superar la capacidad volumétrica en dm³ del vehículo.
+  * Si la carga excede los límites, el envío es rechazado y regresa a estado `EN_ALMACEN`.
+  * Si la carga es admitida, el envío se incorpora a la ruta y pasa automáticamente a estado `EN_RUTA` mediante `asignarRuta()` o `despachar()`.
 
 ---
 
-## HU05: Monitoreo de ocupación y totales de la ruta
-* **Descripción:** Como despachante de ruta, quiero visualizar el peso total cargado, el volumen total y el porcentaje de ocupación del vehículo para optimizar el rendimiento del viaje.
+## HU05: Seguimiento y cambio de estado del envío
+* **Descripción:** Como transportista o despachante, quiero actualizar el estado operativo de los envíos (ENTREGADO, DEVUELTO, CANCELADO), para reflejar el resultado final del despacho.
 * **Criterios de Aceptación:**
-  * El sistema debe calcular en tiempo real la sumatoria de peso y volumen de todos los envíos cargados.
-  * Debe calcular y mostrar el porcentaje de ocupación respecto al límite máximo tanto de peso como de volumen.
-  * Debe permitir listar en detalle todos los paquetes a bordo con sus destinatarios y direcciones.
+  * Debe permitir marcar un envío como `ENTREGADO` al completar la entrega al destinatario.
+  * Debe permitir registrar un envío como `DEVUELTO` si no pudo entregarse, mediante la operación `devolver()`.
+  * El sistema debe permitir filtrar y listar los envíos registrados según su estado actual.
