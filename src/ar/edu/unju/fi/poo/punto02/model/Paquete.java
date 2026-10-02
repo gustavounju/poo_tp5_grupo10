@@ -2,17 +2,15 @@ package ar.edu.unju.fi.poo.punto02.model;
 
 public class Paquete {
     private String codigo;
-    private String destinatario;
-    private String direccion;
+    private String descripcion;
     private double pesoKg;
-    private double volumenM3;
+    private double volumenDm3;
 
-    public Paquete(String codigo, String destinatario, String direccion, double pesoKg, double volumenM3) {
+    public Paquete(String codigo, String descripcion, double pesoKg, double volumenDm3) {
         this.codigo = codigo;
-        this.destinatario = destinatario;
-        this.direccion = direccion;
+        this.descripcion = descripcion;
         this.pesoKg = pesoKg;
-        this.volumenM3 = volumenM3;
+        this.volumenDm3 = volumenDm3;
     }
 
     public String getCodigo() {
@@ -23,20 +21,12 @@ public class Paquete {
         this.codigo = codigo;
     }
 
-    public String getDestinatario() {
-        return destinatario;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDestinatario(String destinatario) {
-        this.destinatario = destinatario;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public double getPesoKg() {
@@ -47,17 +37,16 @@ public class Paquete {
         this.pesoKg = pesoKg;
     }
 
-    public double getVolumenM3() {
-        return volumenM3;
+    public double getVolumenDm3() {
+        return volumenDm3;
     }
 
-    public void setVolumenM3(double volumenM3) {
-        this.volumenM3 = volumenM3;
+    public void setVolumenDm3(double volumenDm3) {
+        this.volumenDm3 = volumenDm3;
     }
 
     @Override
     public String toString() {
-        return "Paquete [" + codigo + "] Destinatario: " + destinatario + 
-               " - Dir: " + direccion + " - Peso: " + pesoKg + " kg - Vol: " + volumenM3 + " m3";
+        return "Paquete [" + codigo + "] " + descripcion + " - Peso: " + pesoKg + " kg - Vol: " + volumenDm3 + " dm3";
     }
 }
