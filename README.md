@@ -7,25 +7,169 @@
 
 ---
 
+## 📑 Acceso Rápido
+* [Diagrama UML — Punto 1 (Ecommerce)](#ejercicio-1--ecommerce)
+* [Diagrama UML — Punto 2 (Logística y Despachos)](#ejercicio-2--logística-y-despachos)
+* [Historias de Usuario (Resumen)](#-historias-de-usuario-resumen)
+* [Estructura del Proyecto y Código Fuente](#-estructura-del-proyecto)
+* [Instrucciones de Ejecución](#-ejecución)
+
+---
+
 ## 👥 Integrantes — Grupo 10
 * Gustavo Elias Murad — LU: APU002128 — GitHub: [@gustavounju]
-
 
 ---
 
 ## 📌 Descripción del Proyecto
-Este repositorio contiene la resolución del Trabajo Práctico Nº 5 enfocado en el diseño orientado a objetos, relaciones entre clases (asociación, agregación, composición, dependencia) y el uso del framework de colecciones (`Collections` / `List`) en el lenguaje de programación Java.
+Este repositorio contiene la resolución del Trabajo Práctico Nº 5 enfocado en el diseño orientado a objetos, relaciones entre clases (asociación, agregación, composición, dependencia) y el framework de colecciones (Collections / List) en Java.
 
-El trabajo se divide en dos módulos principales:
-1. **Módulo Ecommerce:** Gestión de carritos de compra, catálogo de productos y usuarios.
-2. **Módulo Logística:** Gestión de despachos, cálculo de capacidad por peso en vehículos, paquetes, estados de envío y asignación de rutas diarias.
+El desarrollo se compone de dos módulos:
+1. **Módulo Ecommerce (Punto 1):** Gestión de carritos de compras, ítems, productos y operaciones asociadas.
+2. **Módulo Logística (Punto 2):** Despacho y entrega de envíos compuestos por uno o más paquetes, control estricto de capacidad máxima de peso y volumen en vehículos, ciclos de vida con máquina de estados y diagramación de rutas diarias.
+
+---
+
+## 📊 Diagramas de Clases UML
+
+### Ejercicio 1 — Ecommerce
+
+```mermaid
+classDiagram
+    direction TB
+
+    class Usuario {
+        -id: String
+        -nombre: String
+        -email: String
+        +agregarAlCarrito(p: Producto, cantidad: int): void
+        +removerDelCarrito(p: Producto): void
+        +verTotalCarrito(): void
+        +mostrarCarrito(): void
+    }
+
+    class CarritoDeCompras {
+        -id: int
+        -items: List~ItemCarrito~
+        +agregar(p: Producto, cantidad: int): void
+        +remover(p: Producto): void
+        +total(): double
+        +vaciar(): void
+    }
+
+    class ItemCarrito {
+        -id: int
+        -producto: Producto
+        -cantidad: int
+        +subTotal(): double
+    }
+
+    class Producto {
+        -codigo: String
+        -nombre: String
+        -precio: double
+        -activo: boolean
+    }
+
+    Usuario --> "0..1" CarritoDeCompras : usa
+    CarritoDeCompras *-- "0..*" ItemCarrito : contiene
+    ItemCarrito o-- "1" Producto : refiere
+```
+
+### Ejercicio 2 — Logística y Despachos
+
+```mermaid
+classDiagram
+    direction TB
+
+    class EstadoEnvio {
+        <<enumeration>>
+        GENERADO
+        EN_ALMACEN
+        EN_RUTA
+        ENTREGADO
+        DEVUELTO
+        CANCELADO
+    }
+
+    class Paquete {
+        -codigo: String
+        -descripcion: String
+        -pesoKg: double
+        -volumenDm3: double
+        +getCodigo(): String
+        +getDescripcion(): String
+        +getPesoKg(): double
+        +getVolumenDm3(): double
+    }
+
+    class Envio {
+        -id: int
+        -remitente: String
+        -destinatario: String
+        -direccionEntrega: String
+        -estado: EstadoEnvio
+        -fechaCreacion: LocalDate
+        -paquetes: List~Paquete~
+        +agregarPaquete(paquete: Paquete): void
+        +despachar(): void
+        +devolver(): void
+        +asignarRuta(): void
+        +mostrarInfo(): void
+        +getPesoTotal(): double
+        +getVolumenTotal(): double
+        +tienePaquetes(): boolean
+    }
+
+    class Vehiculo {
+        -patente: String
+        -modelo: String
+        -capacidadKgMax: double
+        -volumenDm3Max: double
+        +getPatente(): String
+        +getModelo(): String
+        +getCapacidadKgMax(): double
+        +getVolumenDm3Max(): double
+    }
+
+    class RutaDiaria {
+        -idRuta: int
+        -fecha: LocalDate
+        -vehiculo: Vehiculo
+        -envios: List~Envio~
+        +agregarEnvio(envio: Envio): boolean
+        +getPesoTotalCargado(): double
+        +getVolumenTotalCargado(): double
+        +mostrarResumenRuta(): void
+    }
+
+    class ManagerEnvios {
+        -enviosRegistrados: List~Envio~
+        -vehiculosRegistrados: List~Vehiculo~
+        -contadorEnvios: int
+        +crearEnvio(remitente: String, destinatario: String, dir: String): Envio
+        +agregarVehiculo(vehiculo: Vehiculo): void
+        +buscarVehiculoPorPatente(patente: String): Vehiculo
+        +buscarEnvioPorId(id: int): Envio
+        +filtrarEnviosPorEstado(estado: EstadoEnvio): List~Envio~
+    }
+
+    Envio *-- "1..*" Paquete : compuesto por
+    Envio --> "1" EstadoEnvio : tiene
+    RutaDiaria o-- "0..*" Envio : traslada
+    RutaDiaria --> "1" Vehiculo : asignado a
+    ManagerEnvios o-- "*" Vehiculo : gestiona
+    ManagerEnvios o-- "*" Envio : gestiona
+    MainEnvios ..> ManagerEnvios : ejecuta pruebas
+    MainEnvios ..> RutaDiaria : crea
+```
 
 ---
 
 ## 🛠️ Tecnologías y Herramientas
 * **Lenguaje:** Java 17 (o superior)
 * **Gestor de dependencias:** Apache Maven
-* **Entorno de Desarrollo (IDE):** Eclipse IDE / Spring Tools Suite (STS)
+* **Entorno de Desarrollo (IDE):** Eclipse IDE
 * **Control de versiones:** Git & GitHub
 
 ---
@@ -34,31 +178,31 @@ El trabajo se divide en dos módulos principales:
 
 ```text
 poo_tp5_grupo10/
-├── doc/                            # Diagramas UML e historias de usuario
-│   ├── diagrama_ecommerce.png
-│   └── diagrama_logistica.png
+├── doc/
+│   ├── historioas_de_usuario_punto01.md
+│   └── historioas_de_usuario_punto02.md
 ├── src/
 │   ├── main/
 │   │   ├── java/
 │   │   │   └── ar/edu/unju/fi/poo/
-│   │   │       ├── manager/
-│   │   │       │   ├── ManagerProducto.java
-│   │   │       │   └── ManagerEnvios.java
-│   │   │       ├── model/
-│   │   │       │   ├── CarritoDeCompras.java
-│   │   │       │   ├── Envio.java
-│   │   │       │   ├── EstadoEnvio.java
-│   │   │       │   ├── ItemCarrito.java
-│   │   │       │   ├── Paquete.java
-│   │   │       │   ├── Producto.java
-│   │   │       │   ├── RutaDiaria.java
-│   │   │       │   ├── Usuario.java
-│   │   │       │   └── Vehiculo.java
-│   │   │       ├── MainEcommerce.java
-│   │   │       └── MainEnvios.java
+│   │   │       ├── punto01/
+│   │   │       │   ├── main/MainEcommerce.java
+│   │   │       │   ├── manager/ManagerProducto.java
+│   │   │       │   └── model/
+│   │   │       │       ├── CarritoDeCompras.java
+│   │   │       │       ├── ItemCarrito.java
+│   │   │       │       ├── Producto.java
+│   │   │       │       └── Usuario.java
+│   │   │       └── punto02/
+│   │   │           ├── main/MainEnvios.java
+│   │   │           ├── manager/ManagerEnvios.java
+│   │   │           └── model/
+│   │   │               ├── Envio.java
+│   │   │               ├── EstadoEnvio.java
+│   │   │               ├── Paquete.java
+│   │   │               ├── RutaDiaria.java
+│   │   │               └── Vehiculo.java
 │   │   └── resources/
-│   └── test/
-├── .gitignore
 ├── pom.xml
 └── README.md
 ```
@@ -68,15 +212,17 @@ poo_tp5_grupo10/
 ## 📋 Historias de Usuario (Resumen)
 
 ### Ejercicio 1 — Ecommerce
-* **HU01 - Agregar al carrito:** Como usuario, deseo seleccionar productos y cantidades para cargarlos a mi carrito de compras.
-* **HU02 - Remover del carrito:** Como usuario, deseo quitar productos agregados previamente del carrito.
-* **HU03 - Cálculo de total:** Como usuario, deseo ver el importe total actualizado de mi compra según los subtotales de cada ítem.
-* **HU04 - Vaciar carrito:** Como usuario, deseo limpiar todos los artículos de mi carrito en una sola operación.
+* **HU01 - Agregar al carrito:** Seleccionar productos y cantidades para cargarlos al carrito.
+* **HU02 - Remover del carrito:** Quitar productos agregados previamente.
+* **HU03 - Cálculo de total:** Visualizar el importe total actualizado según subtotales de cada ítem.
+* **HU04 - Vaciar carrito:** Limpiar los artículos del carrito en una sola operación.
 
 ### Ejercicio 2 — Logística y Despachos
-* **HU05 - Registro de paquetes y envíos:** Como operador, deseo registrar envíos con sus paquetes calculando el peso total acumulado.
-* **HU06 - Validación y asignación de ruta:** Como despachante, deseo asignar un envío a una ruta diaria verificando que el vehículo no supere su capacidad máxima en kg y que el envío posea paquetes.
-* **HU07 - Ciclo de vida y estados:** Como operador, deseo actualizar el estado de los envíos (`GENERADO`, `EN_ALMACEN`, `EN_RUTA`, `ENTREGADO`, `DEVUELTO`, `CANCELADO`) según las operaciones del flujo operativo.
+* **HU01 - Registro de paquetes:** Cargar paquetes con código, descripción, peso (kg) y volumen (dm³).
+* **HU02 - Registro de vehículos:** Registrar unidades con patente, modelo y capacidades máximas.
+* **HU03 - Creación de envíos:** Registrar envíos con remitente, destinatario, dirección y agregar uno o más paquetes con estado inicial GENERADO.
+* **HU04 - Asignación a ruta diaria:** Cargar envíos a la ruta validando presencia de paquetes y topes de peso y volumen del vehículo.
+* **HU05 - Ciclo de vida y estados:** Gestionar transiciones de estado (EN_ALMACEN, EN_RUTA, ENTREGADO, DEVUELTO, CANCELADO).
 
 ---
 
@@ -84,10 +230,10 @@ poo_tp5_grupo10/
 
 1. Clonar el repositorio:
    ```bash
-   git clone [https://github.com/](https://github.com/)[organizacion-o-usuario]/poo_tp5_grupo10.git
+   git clone https://github.com/gustavounju/poo_tp5_grupo10.git
    cd poo_tp5_grupo10
    ```
-2. Importar en Eclipse o STS como **Existing Maven Project**.
-3. Ejecutar las clases principales de prueba:
-   * **Punto 1:** `ar.edu.unju.fi.poo.MainEcommerce`
-   * **Punto 2:** `ar.edu.unju.fi.poo.MainEnvios`
+2. Importar en Eclipse IDE como **Existing Maven Projects**.
+3. Ejecutar las clases principales:
+   * **Punto 1:** `ar.edu.unju.fi.poo.punto01.main.MainEcommerce`
+   * **Punto 2:** `ar.edu.unju.fi.poo.punto02.main.MainEnvios`
