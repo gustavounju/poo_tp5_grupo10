@@ -4,13 +4,13 @@ public class Vehiculo {
     private String patente;
     private String modelo;
     private double capacidadKgMax;
-    private double volumenM3Max;
+    private double volumenDm3Max;
 
-    public Vehiculo(String patente, String modelo, double capacidadKgMax, double volumenM3Max) {
+    public Vehiculo(String patente, String modelo, double capacidadKgMax, double volumenDm3Max) {
         this.patente = patente;
         this.modelo = modelo;
         this.capacidadKgMax = capacidadKgMax;
-        this.volumenM3Max = volumenM3Max;
+        this.volumenDm3Max = volumenDm3Max;
     }
 
     public String getPatente() {
@@ -37,17 +37,16 @@ public class Vehiculo {
         this.capacidadKgMax = capacidadKgMax;
     }
 
-    public double getVolumenM3Max() {
-        return volumenM3Max;
+    public double getVolumenDm3Max() {
+        return volumenDm3Max;
     }
 
-    public void setVolumenM3Max(double volumenM3Max) {
-        this.volumenM3Max = volumenM3Max;
+    public void setVolumenDm3Max(double volumenDm3Max) {
+        this.volumenDm3Max = volumenDm3Max;
     }
 
     @Override
     public String toString() {
-        return "Vehiculo [" + patente + "] " + modelo + 
-               " (Max: " + capacidadKgMax + " kg / " + volumenM3Max + " m3)";
+        return "Vehiculo [" + patente + "] " + modelo + " (Capacidad: " + capacidadKgMax + " kg / " + volumenDm3Max + " dm3)";
     }
 }
